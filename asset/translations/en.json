@@ -1,0 +1,11 @@
+{
+  "signUp": "Sign Up",
+  "pleaseSignUpToGetStarted": "Please sign up to get started",
+  "name": "Name",
+  "email": "Email",
+  "password": "Password",
+  "retypePassword": "Retype Password",
+  "english" : "English",
+  "arabic" : "Arabic",
+  "skip" : "Skip"
+}
