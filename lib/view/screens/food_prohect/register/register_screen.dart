@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram2/view_model/cubit/auth_cubit/auth_cubit.dart';
+import 'package:instagram2/view_model/cubit/auth_cubit/auth_state.dart';
 import 'package:instagram2/view_model/translations/locale_keys.g.dart';
 import 'package:instagram2/view_model/utils/app_assets.dart';
 import 'package:instagram2/view_model/utils/app_colors.dart';
@@ -11,6 +14,7 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Register Screen');
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: SizedBox(
@@ -57,14 +61,17 @@ class RegisterScreen extends StatelessWidget {
                       IconButton(
                         onPressed: () {
                           print(context.locale.toString());
-                          if(context.locale.toString() == 'ar'){
+                          if (context.locale.toString() == 'ar') {
                             context.setLocale(Locale('en'));
-                          }else{
+                          } else {
                             context.setLocale(Locale('ar'));
                           }
                           // context.setLocale(Locale('ar'));
                         },
-                        icon: Icon(Icons.language, size: 30.r,),
+                        icon: Icon(
+                          Icons.language,
+                          size: 30.r,
+                        ),
                       ),
                     ],
                   ),
@@ -116,6 +123,7 @@ class RegisterScreen extends StatelessWidget {
                             height: 12.h,
                           ),
                           TextFormField(
+                            controller: AuthCubit.get(context).userName,
                             decoration: InputDecoration(
                               hintText: 'John Doe',
                             ),
@@ -134,6 +142,7 @@ class RegisterScreen extends StatelessWidget {
                             height: 12,
                           ),
                           TextFormField(
+                            controller: AuthCubit.get(context).email,
                             decoration: InputDecoration(
                               hintText: 'Example@gmail.com',
                             ),
@@ -151,18 +160,26 @@ class RegisterScreen extends StatelessWidget {
                           SizedBox(
                             height: 12.h,
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              hintText: '*' * 10,
-                              suffixIcon: IconButton(
-                                onPressed: () {},
-                                icon: SvgPicture.asset(
-                                  AppAssets.eyeOff,
-                                  height: 20.h,
-                                  width: 20.w,
+                          BlocBuilder<AuthCubit, AuthState>(
+                            builder: (context, state) {
+                              print('Text Form Field');
+                              return TextFormField(
+                                obscureText: AuthCubit.get(context).hidePassword,
+                                decoration: InputDecoration(
+                                  hintText: '*' * 10,
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      AuthCubit.get(context).toggleHidePassword();
+                                    },
+                                    icon: SvgPicture.asset(
+                                      AppAssets.eyeOff,
+                                      height: 20.h,
+                                      width: 20.w,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                           SizedBox(
                             height: 12.h,
@@ -177,23 +194,31 @@ class RegisterScreen extends StatelessWidget {
                           SizedBox(
                             height: 12.h,
                           ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              hintText: '*' * 10,
-                              suffixIcon: IconButton(
-                                onPressed: () {},
-                                icon: SvgPicture.asset(
-                                  AppAssets.eyeOff,
-                                  height: 20.h,
-                                  width: 20.w,
+                          BlocBuilder<AuthCubit, AuthState>(builder: (context, state) {
+                            return TextFormField(
+                              obscureText: AuthCubit.get(context).hideConfirmPassword,
+                              decoration: InputDecoration(
+                                hintText: '*' * 10,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    AuthCubit.get(context).toggleHideConfirmPassword();
+                                  },
+                                  icon: SvgPicture.asset(
+                                    AppAssets.eyeOff,
+                                    height: 20.h,
+                                    width: 20.w,
+                                  ),
                                 ),
                               ),
-                            ),
+                            );
+                          },),
+                          SizedBox(
+                            height: 12.h,
                           ),
-                          SizedBox(height: 12.h,),
                           TextFormField(
                             minLines: 5,
                             maxLines: 10,
+                            controller: AuthCubit.get(context).note,
                           ),
                           SizedBox(
                             height: 20.h,
@@ -201,7 +226,9 @@ class RegisterScreen extends StatelessWidget {
                           SizedBox(
                             height: 62.h,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                print('Hello ${AuthCubit.get(context).userName.text}');
+                              },
                               child: Text(
                                 LocaleKeys.signUp.tr().toUpperCase(),
                                 style: TextStyle(

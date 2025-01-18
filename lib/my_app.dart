@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram2/view/screens/food_prohect/register/register_screen.dart';
-import 'package:instagram2/view/screens/layout/layout_screen.dart';
+import 'package:instagram2/view_model/cubit/auth_cubit/auth_cubit.dart';
 import 'package:instagram2/view_model/theme/dark_theme.dart';
-import 'package:instagram2/view_model/theme/light_theme.dart';
 import 'package:instagram2/view_model/theme/light_theme_food.dart';
 
 class MyApp extends StatelessWidget {
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(375,812),
+      designSize: Size(375, 812),
       minTextAdapt: true,
       builder: (_, child) {
         return MaterialApp(
@@ -28,7 +28,10 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
-      child: const RegisterScreen(),
+      child: BlocProvider(
+        create: (context) => AuthCubit(),
+        child: const RegisterScreen(),
+      ),
     );
   }
 }
